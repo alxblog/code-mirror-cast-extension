@@ -1,0 +1,15 @@
+# Ignore les node_modules globaux et les fichiers communs
+node_modules/
+.pnpm-store/
+*.log
+.DS_Store
+.env
+.env.*
+
+# Build outputs globaux
+/dist
+/build
+*.tsbuildinfo
+
+# VSCode settings
+.vscode/

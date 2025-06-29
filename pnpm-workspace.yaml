@@ -1,0 +1,4 @@
+packages:
+  - 'sync-server'
+  - 'sync-client'
+  - 'code-mirror-cast-sync'

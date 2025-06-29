@@ -1,0 +1,10 @@
+{
+  "name": "code-mirror-cast",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter sync-server dev\" \"pnpm --filter sync-client dev\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
