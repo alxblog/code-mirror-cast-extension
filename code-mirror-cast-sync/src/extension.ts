@@ -60,7 +60,8 @@ function startSyncLoop() {
 		const document = editor.document;
 		const content = document.getText();
 		const filename = document.fileName;
-		const language = document.languageId;
+		// const language = document.languageId;
+		const language = filename.split('.').pop();
 		const cursor = editor.selection.active;
 		const config = vscode.workspace.getConfiguration("codeMirrorCast");
 		const fontSize = config.get<number>("fontSize", 16); // Valeur par défaut : 16
@@ -72,7 +73,6 @@ function startSyncLoop() {
 		const payload = {
 			filename,
 			content: isSensitive ? "" : document.getText(),
-
 			language,
 			isSensitive,
 			fontSize,
