@@ -13,3 +13,4 @@ node_modules/
 
 # VSCode settings
 .vscode/
+code-mirror-cast/
