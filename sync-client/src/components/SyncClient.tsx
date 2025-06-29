@@ -14,13 +14,13 @@ import "prismjs/components/prism-tsx";
 import "prismjs/components/prism-json";
 import { useDynamicFontSize } from "@/hooks/useDynamicFontSize";
 
-function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <div className={`rounded border border-gray-600 bg-zinc-900 shadow ${className}`}>{children}</div>;
-}
+// function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+//   return <div className={`rounded border border-gray-600 bg-zinc-900 shadow ${className}`}>{children}</div>;
+// }
 
-function CardContent({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <div className={`p-4 ${className}`}>{children}</div>;
-}
+// function CardContent({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+//   return <div className={`p-4 ${className}`}>{children}</div>;
+// }
 
 function ScrollArea({
   children,
@@ -49,7 +49,7 @@ export default function SyncClient() {
 
   const ws = useRef<WebSocket | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const {updateFontSize} = useDynamicFontSize()
+  const { updateFontSize } = useDynamicFontSize()
 
   useEffect(() => {
     fetch("http://localhost:3333/latest")
@@ -100,20 +100,19 @@ export default function SyncClient() {
 
   return (
     <div className="p-4 h-screen w-screen flex flex-col bg-black text-white">
-      {JSON.stringify(data?.fontSize, null, 2)}
-      <Card className="flex-none mb-2">
+      {/* <Card className="flex-none mb-2">
         <CardContent className="text-xs text-muted-foreground font-mono">
           {data?.filename || "En attente de données..."}
         </CardContent>
-      </Card>
+      </Card> */}
 
       {/* <FileTabs openedFiles={openedFiles} activeFile={data?.filename} /> */}
       {openedFiles.length > 0 && (
-  <FileTabs
-    files={openedFiles}
-    active={data?.filename}
-  />
-)}
+        <FileTabs
+          files={openedFiles}
+          active={data?.filename}
+        />
+      )}
 
       <ScrollArea className="grow text-lg font-mono" scrollRef={scrollContainerRef}>
         <CodeViewer data={data} />
