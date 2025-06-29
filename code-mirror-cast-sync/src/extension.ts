@@ -40,6 +40,13 @@ function connectToWebSocket() {
   });
 }
 
+function isSensitiveFile(filename: string): boolean {
+  const config = vscode.workspace.getConfiguration('codeMirrorCast');
+  const patterns = config.get<string[]>('excludeFiles', []);
+
+  return patterns.some((pattern) => new RegExp(pattern).test(filename));
+}
+
 function startSyncLoop() {
   if (interval) return;
 
@@ -57,11 +64,14 @@ function startSyncLoop() {
     const config = vscode.workspace.getConfiguration('codeMirrorCast');
     const fontSize = config.get<number>('fontSize', 16); // Valeur par défaut : 16
     const openedFiles = vscode.workspace.textDocuments.map(doc => doc.fileName);
+    const isSensitive = isSensitiveFile(filename);
 
     const payload = {
       filename,
-      content,
+            content: isSensitive ? "" : document.getText(),
+
       language,
+      isSensitive,
       fontSize,
       openedFiles,
       cursor: {

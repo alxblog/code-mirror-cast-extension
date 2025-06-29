@@ -5,6 +5,7 @@ export interface SyncData {
 	content: string;
 	language: string;
 	fontSize?: number;
+	isSensitive?: boolean;
 	openedFiles?: string[];
 	cursor?: {
 		line: number;

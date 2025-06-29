@@ -12,6 +12,14 @@ export function CodeViewer({ data }: CodeViewerProps) {
   const renderedContent = useMemo(() => {
     if (!data) return <div className="text-red-500">⏳ En attente de synchronisation...</div>;
 
+    if (data.isSensitive) {
+    return (
+      <div className="text-yellow-500 font-mono">
+        🔒 Ce fichier est marqué comme sensible. Son contenu n’est pas affiché.
+      </div>
+    );
+  }
+
     const lang = Prism.languages[data.language] || Prism.languages.javascript;
     const lines = data.content?.split("\n") ?? [];
 

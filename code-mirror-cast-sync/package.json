@@ -33,7 +33,13 @@
           "default": 16,
           "minimum": 8,
           "description": "Taille de police dans l'interface de visualisation (en pixels)"
-        }
+        },
+        "codeMirrorCast.excludeFiles": {
+        "type": "array",
+        "description": "Regex patterns for files to exclude from sync.",
+        "default": ["\\.env(\\..+)?$", "\\.key$", "\\.pem$", "secrets?"],
+        "items": { "type": "string" }
+      }
       }
     }
   },
