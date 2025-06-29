@@ -21,11 +21,6 @@ app.use(express.json()); // tu peux garder ça, utile pour debug
 const distPath = path.join(__dirname, '../sync-client/dist');
 app.use(express.static(distPath));
 
-// 🎯 SPA fallback (navigateur -> React)
-app.get('/*', (_, res) => {
-  res.sendFile(path.join(distPath, 'index.html'));
-});
-
 // 🔁 WebSocket logic
 let latestState = null;
 const clients = new Set();
@@ -62,6 +57,11 @@ app.get('/latest', (req, res) => {
       cursor: { line: 0, character: 0 },
     }
   );
+});
+
+// 🎯 SPA fallback (navigateur -> React)
+app.get('/*', (_, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
 });
 
 server.listen(PORT, () => {

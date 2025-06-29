@@ -6,8 +6,12 @@
   "engines": {
     "vscode": "^1.101.0"
   },
-  "categories": ["Other"],
-  "activationEvents": ["onStartupFinished"],
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -19,7 +23,19 @@
         "command": "code-mirror-cast-sync.stop",
         "title": "Stop Code Sync"
       }
-    ]
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Code Mirror Cast Sync",
+      "properties": {
+        "codeMirrorCast.fontSize": {
+          "type": "number",
+          "default": 16,
+          "minimum": 8,
+          "description": "Taille de police dans l'interface de visualisation (en pixels)"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "pnpm run compile",

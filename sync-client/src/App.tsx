@@ -1,5 +1,5 @@
 import './App.css'
-import SyncClient from './SyncClient'
+import SyncClient from '@/components/SyncClient'
 
 function App() {
 

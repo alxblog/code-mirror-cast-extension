@@ -1,3 +1,4 @@
+// extension.ts
 import * as vscode from 'vscode';
 import WebSocket from 'ws';
 
@@ -7,7 +8,7 @@ let lastPayload: string | null = null;
 
 export function activate(context: vscode.ExtensionContext) {
   vscode.window.showInformationMessage('🟢 CodeMirrorCast Sync Active');
-
+  
   connectToWebSocket();
 
   context.subscriptions.push({
@@ -39,29 +40,36 @@ function connectToWebSocket() {
   });
 }
 
-
-
 function startSyncLoop() {
   if (interval) return;
 
   interval = setInterval(() => {
     const editor = vscode.window.activeTextEditor;
+    
     if (!editor || !socket || socket.readyState !== WebSocket.OPEN) return;
-
+    
     const document = editor.document;
     const content = document.getText();
     const filename = document.fileName;
     const language = document.languageId;
     const cursor = editor.selection.active;
+    
+    const config = vscode.workspace.getConfiguration('codeMirrorCast');
+    const fontSize = config.get<number>('fontSize', 16); // Valeur par défaut : 16
+    const openedFiles = vscode.workspace.textDocuments.map(doc => doc.fileName);
 
     const payload = {
       filename,
       content,
       language,
+      fontSize,
+      openedFiles,
       cursor: {
         line: cursor.line,
         character: cursor.character,
       },
+      editor,
+      // tabGroups,
     };
 
     const payloadString = JSON.stringify(payload);
@@ -70,8 +78,6 @@ function startSyncLoop() {
       lastPayload = payloadString;
       console.log('[EXT] Envoi vers serveur :', payloadString);
       socket.send(payloadString);
-    } else {
-      // console.log('[EXT] Contenu inchangé, envoi ignoré');
     }
   }, 300);
 }
