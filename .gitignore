@@ -11,6 +11,4 @@ node_modules/
 /build
 *.tsbuildinfo
 
-# VSCode settings
-.vscode/
-code-mirror-cast/
+extension/public/*

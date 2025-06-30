@@ -1,5 +1,5 @@
 {
-  "name": "code-mirror-cast-sync",
+  "name": "extension",
   "displayName": "code-mirror-cast-sync",
   "description": "Send active file content to mirror server",
   "version": "0.0.1",
@@ -16,12 +16,16 @@
   "contributes": {
     "commands": [
       {
-        "command": "code-mirror-cast-sync.start",
-        "title": "Start Code Sync"
+        "command": "codeMirrorCast.start",
+        "title": "codeMirrorCast: Start Code Sync"
       },
       {
-        "command": "code-mirror-cast-sync.stop",
-        "title": "Stop Code Sync"
+        "command": "codeMirrorCast.stop",
+        "title": "codeMirrorCast: Stop Code Sync"
+      },
+      {
+        "command": "codeMirrorCast.openFrontend",
+        "title": "codeMirrorCast: Ouvrir l'interface web"
       }
     ],
     "configuration": {
@@ -35,11 +39,18 @@
           "description": "Taille de police dans l'interface de visualisation (en pixels)"
         },
         "codeMirrorCast.excludeFiles": {
-        "type": "array",
-        "description": "Regex patterns for files to exclude from sync.",
-        "default": ["\\.env(\\..+)?$", "\\.key$", "\\.pem$", "secrets?"],
-        "items": { "type": "string" }
-      }
+          "type": "array",
+          "description": "Regex patterns for files to exclude from sync.",
+          "default": [
+            "\\.env(\\..+)?$",
+            "\\.key$",
+            "\\.pem$",
+            "secrets?"
+          ],
+          "items": {
+            "type": "string"
+          }
+        }
       }
     }
   },
