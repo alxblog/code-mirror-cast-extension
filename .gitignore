@@ -15,4 +15,4 @@ node_modules/
 .vscode/
 code-mirror-cast/
 /code-mirror-cast-sync/*
-extension/public/index.html
+extension/public/*
