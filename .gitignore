@@ -14,4 +14,5 @@ node_modules/
 # VSCode settings
 .vscode/
 code-mirror-cast/
-/code-mirror-cast-sync/client-dist
+/code-mirror-cast-sync/*
+extension/public/index.html
