@@ -2,7 +2,9 @@
   "name": "code-mirror-cast",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"pnpm --filter sync-server dev\" \"pnpm --filter sync-client dev\""
+    "dev": "concurrently \"pnpm --filter sync-server dev\" \"pnpm --filter sync-client dev\"",
+    "dev-frontend": "pnpm --filter frontend run dev", 
+    "build-frontend": "pnpm --filter frontend build-and-copy"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
