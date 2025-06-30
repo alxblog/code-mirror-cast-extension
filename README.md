@@ -112,10 +112,5 @@ This project is still under active development. Expect changes, improvements, an
 - [ ] Open a quick access window when clicking the status bar icon to:  
   1. Start/stop the server  
   2. Change the frontend font size (`fontSize`)  
-
-
-
-
-
-
+- [ ] Add a button to temporarily "blur" or hide the content display.
 
