@@ -3,7 +3,7 @@ import { WebSocketServer, WebSocket } from 'ws';
 import * as path from 'path';
 import * as fs from 'fs';
 
-export function startInternalServer(port: number = 3333) {
+export function initInternalServer(port: number = 3333) {
   const clients = new Set<WebSocket>();
 
   // Serveur HTTP basique
