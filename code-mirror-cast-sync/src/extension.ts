@@ -1,44 +1,23 @@
-// extension.ts
 import * as vscode from "vscode";
-import WebSocket from "ws";
+import { startInternalServer } from "./extension/server";
 
-let socket: WebSocket | null = null;
 let interval: NodeJS.Timeout | null = null;
 let lastPayload: string | null = null;
+let previewServer: ReturnType<typeof startInternalServer> | null = null;
 
 export function activate(context: vscode.ExtensionContext) {
 	vscode.window.showInformationMessage("🟢 CodeMirrorCast Sync Active");
 
-	connectToWebSocket();
+	previewServer = startInternalServer();
+	previewServer.start(); // 🔌 Démarre le serveur intégré
+
+	startSyncLoop();
 
 	context.subscriptions.push({
 		dispose() {
 			stopSyncLoop();
-			socket?.close();
+			previewServer?.stop();
 		},
-	});
-}
-
-function connectToWebSocket() {
-	if (socket && socket.readyState === WebSocket.OPEN) return;
-
-	socket = new WebSocket("ws://localhost:3333");
-
-	socket.on("open", () => {
-		console.log("[CodeMirrorCast] ✅ Connected to sync server");
-		startSyncLoop();
-	});
-
-	socket.on("close", () => {
-		console.warn(
-			"[CodeMirrorCast] 🔌 Disconnected from sync server. Reconnecting..."
-		);
-		stopSyncLoop();
-		setTimeout(connectToWebSocket, 1000);
-	});
-
-	socket.on("error", (err) => {
-		console.error("[CodeMirrorCast] ❌ WebSocket error:", err);
 	});
 }
 
@@ -54,43 +33,40 @@ function startSyncLoop() {
 
 	interval = setInterval(() => {
 		const editor = vscode.window.activeTextEditor;
-
-		if (!editor || !socket || socket.readyState !== WebSocket.OPEN) return;
+		if (!editor) return;
 
 		const document = editor.document;
 		const content = document.getText();
 		const filename = document.fileName;
-		// const language = document.languageId;
-		const language = filename.split('.').pop();
+		const language = document.languageId;
 		const cursor = editor.selection.active;
+
 		const config = vscode.workspace.getConfiguration("codeMirrorCast");
-		const fontSize = config.get<number>("fontSize", 16); // Valeur par défaut : 16
+		const fontSize = config.get<number>("fontSize", 16);
 		const openedFiles = vscode.workspace.textDocuments
-    .filter(doc => doc.uri.scheme === 'file') 
-    .map( (doc) => doc.fileName );
+			.filter((doc) => doc.uri.scheme === "file")
+			.map((doc) => doc.fileName);
 		const isSensitive = isSensitiveFile(filename);
 
 		const payload = {
 			filename,
-			content: isSensitive ? "" : document.getText(),
+			content,
 			language,
-			isSensitive,
 			fontSize,
+			isSensitive,
 			openedFiles,
 			cursor: {
 				line: cursor.line,
 				character: cursor.character,
 			},
-			editor,
-			// tabGroups,
 		};
 
 		const payloadString = JSON.stringify(payload);
 
 		if (payloadString !== lastPayload) {
 			lastPayload = payloadString;
-			console.log("[EXT] Envoi vers serveur :", payloadString);
-			socket.send(payloadString);
+			console.log("[EXT] Envoi vers client intégré");
+			previewServer?.broadcast(payloadString); // 🚀 Envoi via le serveur WebSocket
 		}
 	}, 300);
 }
@@ -104,5 +80,5 @@ function stopSyncLoop() {
 
 export function deactivate() {
 	stopSyncLoop();
-	socket?.close();
+	previewServer?.stop();
 }
