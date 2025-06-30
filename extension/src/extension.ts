@@ -2,12 +2,16 @@ import * as vscode from "vscode";
 import { initInternalServer } from "./extension/server";
 import { isSensitiveFile } from "./helpers/isSensitiveFile";
 import { getFrontendUrl } from "./helpers/getFrontendUrl";
-import { createStatusBarItem, setServerRunning } from "./extension/statusBar";
+import {
+	createStatusBarItem,
+	updateStatusBar,
+	ServerStatus,
+} from "./extension/statusBar";
+import { toggleServer } from "./extension/commands/toggleServer";
 
 let interval: NodeJS.Timeout | null = null;
 let lastPayload: string | null = null;
 let previewServer: ReturnType<typeof initInternalServer> | null = null;
-let isServerRunning: boolean = false;
 
 const openFrontend = async (context: vscode.ExtensionContext) => {
 	const url = await getFrontendUrl(context);
@@ -18,41 +22,34 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.window.showInformationMessage("🟢 CodeMirrorCast Active");
 
 	const autoStart = false;
-	const openBrowserAtStart = true;
+	const openBrowserAtStart = false;
 
 	createStatusBarItem();
 
 	previewServer = initInternalServer();
 	// 🔌 Démarre le serveur intégré
-
-	context.subscriptions.push(
-		vscode.commands.registerCommand('codeMirrorCast.toggleServer', async () => {
-      if (isServerRunning) {
-        await vscode.commands.executeCommand('codeMirrorCast.stop');
-        setServerRunning(false);
-      } else {
-        const port = await vscode.commands.executeCommand<number>('codeMirrorCast.start');
-        setServerRunning(true, port ?? 3333);
-      }
-    }),
-		vscode.commands.registerCommand("codeMirrorCast.start", () => {
+	const {commands} = vscode
+	const {registerCommand} = commands
+	const commandsToRegister = {
+		toggleServer: async () => { 
+			toggleServer(previewServer?.isStarted() ?? false)
+		},
+		start: () => {
 			previewServer && previewServer.start();
-			isServerRunning = true
 			openBrowserAtStart && openFrontend(context);
 			startSyncLoop();
 			vscode.window.showInformationMessage("🟢 CodeMirrorCast server started");
-		}),
-		vscode.commands.registerCommand("codeMirrorCast.stop", () => {
+		},
+		stop: () => {
 			stopSyncLoop();
 			previewServer?.stop();
-			isServerRunning = false
-
-		}),
-		vscode.commands.registerCommand("codeMirrorCast.openFrontend", () =>
-			openFrontend(context)
-		)
+		},
+		openFrontend: ()=> openFrontend(context)
+	}
+	context.subscriptions.push(
+		...Object.entries(commandsToRegister)
+		.map(([cmdName, fn]) => registerCommand(`codeMirrorCast.${cmdName}`, fn))
 	);
-
 
 	if (autoStart) {
 		previewServer && previewServer.start();
