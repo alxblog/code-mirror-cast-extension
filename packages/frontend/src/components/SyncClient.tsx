@@ -13,6 +13,7 @@ import "prismjs/components/prism-jsx";
 import "prismjs/components/prism-tsx";
 import "prismjs/components/prism-json";
 import { useDynamicFontSize } from "@/hooks/useDynamicFontSize";
+import {useSyncBrowserSourceSizeWithBounds} from "@/hooks/useSyncBrowserSourceSizeWithBounds";
 
 // function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
 //   return <div className={`rounded border border-gray-600 bg-zinc-900 shadow ${className}`}>{children}</div>;
@@ -50,6 +51,10 @@ export default function SyncClient() {
   const ws = useRef<WebSocket | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const { updateFontSize } = useDynamicFontSize()
+   useSyncBrowserSourceSizeWithBounds({
+    sourceName: 'Vite.js',
+    sceneName: 'Scène 2',
+  });
 
   useEffect(() => {
     fetch("http://localhost:3333/latest")
@@ -99,7 +104,7 @@ export default function SyncClient() {
   }, [data]);
 
   return (
-    <div className="p-4 h-screen w-screen flex flex-col bg-black text-white">
+    <div className="p-4 h-full w-full flex flex-col bg-black text-white">
       {/* <Card className="flex-none mb-2">
         <CardContent className="text-xs text-muted-foreground font-mono">
           {data?.filename || "En attente de données..."}

@@ -8,11 +8,11 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "build-and-copy": "pnpm run build && shx rm -rf ../extension/public && shx cp -r dist ../extension/public"
-
+    "build-and-copy": "npm run build && shx rm -rf ../extension/public && shx cp -r dist ../extension/public"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",
+    "obs-websocket-js": "^5.0.6",
     "prismjs": "^1.30.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

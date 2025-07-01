@@ -3,6 +3,7 @@
   "displayName": "code-mirror-cast-sync",
   "description": "Send active file content to mirror server",
   "version": "0.0.1",
+  "publisher": "alexandre",
   "engines": {
     "vscode": "^1.101.0"
   },
@@ -55,11 +56,12 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "pnpm run compile",
+    "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "pnpm run compile && pnpm run lint",
+    "pretest": "npm run compile && pnpm run lint",
     "lint": "eslint src",
+    "package": "vsce package --no-dependencies",
     "test": "vscode-test"
   },
   "devDependencies": {

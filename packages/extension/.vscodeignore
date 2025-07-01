@@ -1,0 +1,16 @@
+# .vscodeignore
+
+# Ignorer les fichiers système et git
+.DS_Store
+.git
+*.log
+
+# Ignorer les répertoires hors extension
+../*
+
+# Facultatif : ignorer les fichiers inutiles à l'exécution
+tsconfig.json
+pnpm-lock.yaml
+.vscode/
+src/
+tests/
