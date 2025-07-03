@@ -1,0 +1,11 @@
+{
+  "name": "code-mirror-cast-extension",
+  "private": true,
+  "scripts": {
+    "dev-frontend": "cd frontend && npm run dev",
+    "build-frontend": "cd frontend && npm run build",
+    "prepare-extension": "node scripts/build-and-copy.mjs",
+    "build": "npm run prepare-extension && cd extension && npm run compile",
+    "package": "cd extension && npm run package"
+  }
+}
